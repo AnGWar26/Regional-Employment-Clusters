@@ -1,0 +1,4 @@
+service_id,start_date,end_date,monday,tuesday,wednesday,thursday,friday,saturday,sunday
+7055925-0000001-25,20200525,20200525,1,0,0,0,0,0,0
+11121,20200126,20200411,1,1,1,1,1,1,1
+11122,20200412,20200606,1,1,1,1,1,1,1
