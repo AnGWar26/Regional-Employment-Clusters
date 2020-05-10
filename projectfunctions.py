@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 import gzip
@@ -31,7 +31,10 @@ def cleanlink_wac(file,fips,shp):
 
     blocks = gpd.read_file(shp)
     blocks = blocks.merge(lehd_df, how='left', on='GEOID10')
-    blocks.drop(['INTPTLON10','INTPTLAT10','COUNTYFP10','STATEFP10','NAME10','TRACTCE10','BLOCKCE10','MTFCC10','FUNCSTAT10','UR10','AWATER10','UACE10','UATYP10','createdate'], axis=1, inplace=True)
+    try:
+        blocks.drop(['INTPTLON10','INTPTLAT10','COUNTYFP10','STATEFP10','NAME10','TRACTCE10','BLOCKCE10','MTFCC10','FUNCSTAT10','UR10','AWATER10','UACE10','UATYP10','createdate'], axis=1, inplace=True)
+    except:
+        blocks.drop(['INTPTLON10','INTPTLAT10','COUNTYFP10','STATEFP10','NAME10','TRACTCE10','BLOCKCE10','MTFCC10','FUNCSTAT10','UR10','AWATER10','UACE10','createdate'], axis=1, inplace=True)
     blocks.fillna(0,inplace=True)
     #Remove any blocks where there is no land area, no jobs there so why would we care about them?
     blocks = blocks[blocks.ALAND10 != 0]
@@ -146,7 +149,7 @@ def calc_lq(dataframe):
     for items in range(len(firmsize_list)):
         dataframe['LQ_' + firmsize_list[items]] = FirmSizeLQIndex.statistics[:,items]
 
-def graph_codes(dataframe,code,cmap='OrRd',k=5):
+def graph_codes(dataframe,code,cmap='OrRd',k=5,scheme='fisherjenkssampled'):
     """A function that takes the dataframe, LEHD code(string), cmap(string), and k(int) as arguements. Graphs both the original
     and the LQ of the code with arguements specified. Only necessary arguments are dataframe and code. """
     #Create a cmap that's more appropriate for displaying LQ
@@ -160,8 +163,14 @@ def graph_codes(dataframe,code,cmap='OrRd',k=5):
         dataframe[lq].replace(0,'NaN')
         
     #start graphing
-    fig, axs = matplotlib.pyplot.subplots(1,2, figsize=(20,10))
-    axs[0].set_title(code)
-    axs[1].set_title('LQ_'+ code)
-    return dataframe.plot(column= code, cmap=cmap, k=k, scheme='fisherjenkssampled', figsize = (10,10), legend=True, ax=axs[0]), dataframe.plot(column= 'LQ_' + code, cmap=lqmap, k=k, scheme='fisherjenkssampled', figsize = (10,10), legend=True, ax=axs[1])
+        fig, axs = matplotlib.pyplot.subplots(1,2, figsize=(20,10))
+        axs[0].set_title(code)
+        axs[1].set_title('LQ_'+ code)
+        return dataframe.plot(column= code, cmap=cmap, k=k, scheme=scheme, figsize = (10,10), legend=True, ax=axs[0]), dataframe.plot(column= 'LQ_' + code, cmap=lqmap, k=k, scheme=scheme, figsize = (10,10), legend=True, ax=axs[1])
+
+
+# In[ ]:
+
+
+
 
