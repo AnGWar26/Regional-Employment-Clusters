@@ -30,12 +30,16 @@ dependencies:
   - xlrd
   - xlsxwriter
   - pandana
+  - segregation
+  - mapclassify
+  - splot
   - pip:
         - folium
         - contextily
         - geojson
         - palettable
         - libpysal
+        - pysal
         - esda
         - mapclassify
         - giddy

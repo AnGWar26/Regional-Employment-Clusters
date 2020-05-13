@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
+# %%
 
-# In[2]:
+# %%
 
 
 import gzip
@@ -12,7 +13,7 @@ import numpy as np
 import matplotlib
 import libpysal
 import segregation
-import mapclassify
+from splot._viz_utils import shift_colormap
 from segregation.local import MultiLocationQuotient, MultiLocalDiversity, MultiLocalEntropy, MultiLocalSimpsonInteraction, MultiLocalSimpsonConcentration, LocalRelativeCentralization
 
 def cleanlink_wac(file,fips,shp):
@@ -35,7 +36,7 @@ def cleanlink_wac(file,fips,shp):
         blocks.drop(['INTPTLON10','INTPTLAT10','COUNTYFP10','STATEFP10','NAME10','TRACTCE10','BLOCKCE10','MTFCC10','FUNCSTAT10','UR10','AWATER10','UACE10','UATYP10','createdate'], axis=1, inplace=True)
     except:
         blocks.drop(['INTPTLON10','INTPTLAT10','COUNTYFP10','STATEFP10','NAME10','TRACTCE10','BLOCKCE10','MTFCC10','FUNCSTAT10','UR10','AWATER10','UACE10','createdate'], axis=1, inplace=True)
-    blocks.fillna(0,inplace=True)
+    blocks.fillna(value=0,inplace=True)
     #Remove any blocks where there is no land area, no jobs there so why would we care about them?
     blocks = blocks[blocks.ALAND10 != 0]
     return blocks
@@ -153,7 +154,6 @@ def graph_codes(dataframe,code,cmap='OrRd',k=5,scheme='fisherjenkssampled'):
     """A function that takes the dataframe, LEHD code(string), cmap(string), and k(int) as arguements. Graphs both the original
     and the LQ of the code with arguements specified. Only necessary arguments are dataframe and code. """
     #Create a cmap that's more appropriate for displaying LQ
-    from pysal.viz.splot._viz_utils import shift_colormap
     lqmap = shift_colormap('YlOrBr', midpoint=1.0)
     
     #Remove 0 in LQ; more buckets for other values
@@ -169,7 +169,7 @@ def graph_codes(dataframe,code,cmap='OrRd',k=5,scheme='fisherjenkssampled'):
         return dataframe.plot(column= code, cmap=cmap, k=k, scheme=scheme, figsize = (10,10), legend=True, ax=axs[0]), dataframe.plot(column= 'LQ_' + code, cmap=lqmap, k=k, scheme=scheme, figsize = (10,10), legend=True, ax=axs[1])
 
 
-# In[ ]:
+# %%
 
 
 
